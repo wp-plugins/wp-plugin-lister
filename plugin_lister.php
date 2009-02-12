@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Plugin Lister
-Plugin URI: http://wordpress.org/extend/plugins/plugin-lister/
+Plugin URI: http://wordpress.org/extend/plugins/wp-plugin-lister/
 Description: Outputs all of your active plugins via PHP for use in page templates & more.  Just call: &LT;?php wp_list_all_active_plugins(); ?&GT;
 Version: 1.0
 Author: Paul G Petty
