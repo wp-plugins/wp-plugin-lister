@@ -18,3 +18,13 @@ Just call:
 1. Download the plugin archive and expand it
 2. Put the 'plugin_lister.php' file into your wp-content/plugins/ directory.
 3. Go to the Plugins page in your WordPress Administration area and click 'Activate' for WP Plugin Lister.
+
+== Frequently Asked Questions == 
+
+What questions could you have?
+
+None, right.
+
+== Screenshots ==
+
+Not Applicable
