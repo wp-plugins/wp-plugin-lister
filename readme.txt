@@ -2,8 +2,8 @@
 Tags: plugins
 Contributors: Paul G Petty
 Requires at least: 2.7
-Tested up to: 2.7
-Stable tag: 1.0.0
+Tested up to: 2.9
+Stable tag: 2.0.0
 
 == Description ==
 
