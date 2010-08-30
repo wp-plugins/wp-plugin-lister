@@ -2,12 +2,14 @@
 Tags: plugins
 Contributors: Paul G Petty
 Requires at least: 2.7
-Tested up to: 2.9
-Stable tag: 2.0.0
+Tested up to: 3.1
+Stable tag: 2.1.0
 
 == Description ==
 
 Outputs all of your active plugins via PHP for use in page templates & more.  
+
+And also includes the ability to broadcast the theme on your site.
 
 Just call: 
 

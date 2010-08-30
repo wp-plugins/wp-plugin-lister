@@ -2,17 +2,18 @@
 /*
 Plugin Name: Plugin Lister
 Plugin URI: http://wordpress.org/extend/plugins/wp-plugin-lister/
-Description: Outputs all of your active plugins via PHP for use in page templates & more.  Just call: &LT;?php wp_list_all_active_plugins(); ?&GT;
-Version: 2.0.0
+Description: Outputs all of your active plugins via PHP for use in page templates & more (including the option to display your theme).  Just call: &LT;?php wp_list_all_active_plugins(); ?&GT;
+Version: 2.1.0
 Author: Paul G Petty
 Author URI: http://paulgriffinpetty.com/
 */
 
-define("PluginListerVersion", "2.0.0");
+define("PluginListerVersion", "2.1.0");
 
 $PluginListerOptions = array(
     'title' => '',
-    'description' => ''
+    'description' => '',
+    'show_theme_data' => 'off'
 );
 
 define("PluginListerOptions", serialize($PluginListerOptions));
@@ -138,8 +139,39 @@ function wp_list_all_active_plugins() {
 		$plugin_list .= "</li>";
 	
 	}
-	
-    $plugin_list .= "</ul>";
+    
+    // http://codex.wordpress.org/Function_Reference/get_theme_data
+    // need to add option to show this:
+
+    if ($PluginListerOptionsStorage['show_theme_data'] == "on") {
+
+        $theme_file = get_bloginfo( "stylesheet_url" );
+        
+        if ($theme_file != "") {
+            
+            $theme_data = get_theme_data( $theme_file );
+    
+        	$plugin_list .= "<li class='theme_data'>";    	
+        	
+    		$plugin_list .= "<h4><a href='".$theme_data['URI']."' target='_new'>".$theme_data['Title']."</a> (Version: ".$theme_data['Version'].")</h4>";
+    		$plugin_list .= "<p>";
+    		
+    		$plugin_list .= $theme_data['Description'];
+    				
+    		if ($theme_data['Author'] != "") { 
+    		  $plugin_list .= "<br /><em>Created by:</em> <a href='".$theme_data['URI']."' target='_new'>".$theme_data['Author']."</a>";
+    		} else {
+        		$plugin_list .= "<br /><em>Created by:</em> ".$theme_data['Author'];
+    		}
+    		
+    		$plugin_list .= "</p>";  	
+            $plugin_list .= "</li>";
+        
+        }
+    
+    }
+    
+	$plugin_list .= "</ul>";
     
     echo $plugin_list;
 
@@ -155,12 +187,19 @@ function PluginLister_init() {
     
     if (isset($_POST['description'])) {
         $PluginListerOptionsStorage['description'] = $_POST['description'];
-    } 
+    }  
+    
+    if (isset($_POST['show_theme_data'])) {
+        $PluginListerOptionsStorage['show_theme_data'] = "on";
+    } else {
+        $PluginListerOptionsStorage['show_theme_data'] = "off";
+    }
         
     update_option(adminOptionsName, $PluginListerOptionsStorage);
                
-    $PluginLister_title       = $PluginListerOptionsStorage['title'];
-    $PluginLister_description = $PluginListerOptionsStorage['description'];
+    $PluginLister_title           = $PluginListerOptionsStorage['title'];
+    $PluginLister_description     = $PluginListerOptionsStorage['description'];
+    $PluginLister_show_theme_data = $PluginListerOptionsStorage['show_theme_data'];
 
     // Admin UI starts
     
@@ -238,10 +277,23 @@ function PluginLister_init() {
         
                     <label for="title"><strong>Title</strong> (that appears above list &amp; is optional)</label> <br />
                     <input type="text" name="title" value="<?php echo $PluginLister_title; ?>" /> <br />
+
                     <br />
                     <br />
                     <label for="description"><strong>Description</strong> (that appears between title and list &amp; is optional)</label> <br />
                     <textarea name="description"><?php echo $PluginLister_description; ?></textarea> <br />
+
+                    <br />
+                    <br />
+                    <label for="description"><strong>Show Theme Info</strong> (as the last item in the list)</label> <br />
+                    <?php
+                    if ($PluginListerOptionsStorage['show_theme_data'] != "on") {
+                        echo '<input type="checkbox" name="show_theme_data" />';
+                    } else {
+                        echo '<input type="checkbox" name="show_theme_data" checked="checked" />';
+                    } 
+                    echo " (Currently this feature is turned ".$PluginListerOptionsStorage['show_theme_data'].")";
+                    ?> <br />
 
                 </fieldset>    
         
